@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VueJS</title>
+
+    <style type="text/css">
+        input {
+            background-color: white;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #00ea5a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #00b32d;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0;
+        }
+
+        fieldset {
+            border: none;
+            margin-bottom: 15px;
+        }
+
+        hr {
+            border: 1px solid #eee;
+            margin: 20px 0;
+        }
+
+        span {
+            color: #00ea27;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+
+        <h3>
+            Hola Aplicacion: {{name_app}}
+        </h3>
+
+        <button @click="contador++">
+            Tocame: {{contador}}
+        </button>
+
+        <form>
+            <fieldset>
+                <label>
+                    Nombre
+                </label>
+                <input type="text" v-model="username" placeholder="Tu nombre" name="">
+            </fieldset>
+            <label>
+                Tu nombre es: <span> {{username}}</span>
+            </label>
+        </form>
+        <hr>
+
+        <form>
+            <input type="number" v-model=" num1">
+
+            <br>
+
+            <input type="number" v-model="num2">
+
+            <br>
+
+            <button type="button" v-on:click="resultado=num1 + num2">
+                Sumar
+            </button>
+        </form>
+
+        <label>
+            {{resultado}}
+        </label>
+    </div>
+
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const name_app = ref('Primera Tarea de VueJS')
+                let contador = ref(0)
+                let username = ref('')
+                let resultado = ref('')
+                let num1 = ref('')
+                let num2 = ref('')
+                return {
+                    name_app,
+                    contador,
+                    username,
+                    resultado,
+                    num1,
+                    num2
+                }
+            }
+        }).mount('#main')
+
+
+    </script>
+</body>
+
+</html>
