@@ -126,6 +126,39 @@
         <label>
             {{resultado}}
         </label>
+
+       
+
+        <form>
+
+            <fieldset>
+                    <label>
+                        Nombre:
+                    </label>
+                <input type="" v-model="name" name="">
+            </fieldset>
+
+            
+            <br>
+            
+            <fieldset>
+                <label>
+                    rol:
+                </label>
+                <input type="" v-model="rol" rol="">
+            </fieldset>
+            <button v-on:click="agregarUsuario" type="button">
+                Guardar
+            </button>
+        </form>
+
+        <ul>
+            <li v-for="user in users">
+
+                {{user.name}} - {{user.rol}}
+
+            </li>
+        </ul>
     </div>
 
 
@@ -136,20 +169,56 @@
         createApp({
             setup() {
                 const name_app = ref('Primera Tarea de VueJS')
+                let name = ref('')
+                let rol = ref('')
+                let users = ref([
+                    {
+                        "name": "Aleksey",
+                        "rol": "Arquitecto"
+                    },
+                    {
+                        "name": "Abdel",
+                        "rol": "Buceador"
+                    },
+                    {
+                        "name": "Nedel",
+                        "rol": "Lolero"
+                    }
+
+                ]);
+
                 let contador = ref(0)
                 let username = ref('')
                 let resultado = ref('')
                 let num1 = ref('')
                 let num2 = ref('')
+
                 return {
                     name_app,
                     contador,
                     username,
                     resultado,
                     num1,
-                    num2
+                    num2,
+                    users,
+                    name,
+                    rol
+                }
+            },
+
+            methods: {
+                agregarUsuario(){
+                    let temporal =
+                    {
+                        "name": this.name,
+                        "rol": this.rol
+                    }
+                    this.users.push(temporal)
+                    this.name ='',
+                    this.rol=''
                 }
             }
+
         }).mount('#main')
 
 
