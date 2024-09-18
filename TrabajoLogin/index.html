@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+    <div id="main">
+        <h3>
+            Hola Aplicacion: {{name_app}}
+        </h3>
+        <form  >
+            <fieldset>
+                <label>
+                    Email
+                </label>
+                <input type="email" v-model="email" placeholder="Email" name="">
+            </fieldset>
+            <fieldset>
+                <label>
+                    Password
+                </label>
+                <input type="password" v-model="password" placeholder="Contraseña" name="">
+            </fieldset>
+
+            <button type="submit">Acceso</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const name_app = ref('Login VueJS')
+                let name = ref('')
+                let email = ref('')
+                let password = ref('')
+                let is_Log = false
+
+
+                return {
+                    name_app,
+                    email,
+                    password,
+                    is_Log
+
+                }
+            },
+
+            methods: {
+                login() {
+                    fetch("users.json")
+                        .then(response => response.json())
+                        .then(response =>  console.log(response));
+                }
+            },
+
+        }).mount('#main')
+    </script>
+</body>
+
+</html>
