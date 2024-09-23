@@ -13,29 +13,43 @@
             The real App {{name_app}}
         </h1>
         <form @submit.prevent="login" v-if="!is_Log">
-
-            <h1 v-if="!is_Log">
-                Bienvenido Usuario
-
+            <form @submit.prevent="login" v-if="!is_Log">
+                <h1>Bienvenido Usuario</h1>
 
                 <fieldset>
-                    <label>
-                        Email
-                    </label>
-                    <input type="email" v-model="email">
+                    <label>Email</label>
+                    <input type="email" v-model="email" required>
                 </fieldset>
 
                 <fieldset>
-                    <label>
-                        Password
-                    </label>
-                    <input type="password" v-model="password">
+                    <label>Password</label>
+                    <input type="password" v-model="password" required>
                 </fieldset>
-                <button type="submit">
-                    Access
-                </button>
-            </h1>
-        </form>
+
+                <button type="submit">Access</button>
+            </form>
+
+
+            <div v-if="is_Log">
+                <h2>Lista de Usuarios</h2>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Personal data</th>
+                            <th>Contact data</th>
+                            <th>Company data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id">
+                            <td>{{ user.name }}, {{ user.username }}</td>
+                            <td>{{ user.email }}, {{ user.phone }}</td>
+                            <td>{{ user.company.name }}, {{ user.company.bs }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    </div>
 
 
     </div>
@@ -50,11 +64,13 @@
                 const email = ref('');
                 const password = ref('');
                 const is_Log = ref(false);
+                const users = ref([]);
                 return {
                     email,
                     password,
                     name_app,
-                    is_Log
+                    is_Log,
+                    users
                 }
             },
             methods: {
@@ -67,7 +83,8 @@
                         .then(users => {
                             users.forEach(user => {
                                 if (user.email === this.email && user.password === this.password) {
-                                    this.is_Log = ref(true);
+                                    this.is_Log = true;
+                                    this.users = users;
                                     console.log(this.is_Log)
                                 }
                             });
