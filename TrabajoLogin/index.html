@@ -68,71 +68,92 @@
             The real App {{name_app}}
         </h1>
         <form @submit.prevent="login" v-if="!is_Log">
-            <form @submit.prevent="login" v-if="!is_Log">
-                <h1>Bienvenido Usuario</h1>
+            <fieldset>
+                <label>Email</label>
+                <input type="email" v-model="email" required>
+            </fieldset>
+
+            <fieldset>
+                <label>Password</label>
+                <input type="password" v-model="password" required>
+            </fieldset>
+
+            <button type="submit">Access</button>
+        </form>
+
+        <div v-if="is_Log && !is_Edit">
+            <h2>Bienvenido usuario</h2>
+            <button @click="logout">Cerrar sesión</button>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Opciones:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in users" :key="user.id">
+                        <td>{{ user.name }} </td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <button @click="editar(user)">Editar</button>
+                            <button @click="borrar(user.email)">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div v-if="is_Edit">
+            <h3>Editando usuario: {{ editarUsuario.name }}</h3>
+
+            <form @submit.prevent="saveEdit">
+                <fieldset>
+                    <label>Name</label>
+                    <input type="text" v-model="editarUsuario.name" required>
+                </fieldset>
 
                 <fieldset>
                     <label>Email</label>
-                    <input type="email" v-model="email" required>
+                    <input type="email" v-model="editarUsuario.email" required>
                 </fieldset>
 
                 <fieldset>
-                    <label>Password</label>
-                    <input type="password" v-model="password" required>
+                    <label>Username</label>
+                    <input type="text" v-model="editarUsuario.username" required>
                 </fieldset>
 
-                <button type="submit">Access</button>
+                <button type="submit">Guardar</button>
+                <button @click="cancelarEdicion">Cancelar</button>
             </form>
-
-
-            <div v-if="is_Log">
-                <h2>Lista de Usuarios</h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Personal data</th>
-                            <th>Contact data</th>
-                            <th>Company data</th>
-                            <th>Opciones:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in users" :key="user.id">
-                            <td>{{ user.name }}, {{ user.username }}</td>
-                            <td>{{ user.email }}, {{ user.phone }}</td>
-                            <td>{{ user.company.name }}, {{ user.company.bs }}</td>
-                            <td><button>Editar</button>
-                                <button v-on:click="borrar(user.email)">Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-    </div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <script>
-        const { createApp, ref } = Vue
+        const { createApp, ref } = Vue;
+
         createApp({
             data() {
-                const name_app = ref('El real OG VueJS');
-                const email = ref('');
-                const password = ref('');
-                const is_Log = ref(false);
-                const users = ref([]);
                 return {
-                    email,
-                    password,
-                    name_app,
-                    is_Log,
-                    users
-                }
+                    name_app: 'El real OG VueJS',
+                    email: '',
+                    password: '',
+                    is_Log: false,
+                    is_Edit: false,
+                    editUser: null,
+                    originalEmail: null,
+                    users: []
+                };
             },
             methods: {
                 login() {
-                    console.log(this.email),
-                        console.log(this.password)
+                    console.log(this.email, this.password);
 
                     fetch('users.json')
                         .then(response => response.json())
@@ -141,25 +162,68 @@
                                 if (user.email === this.email && user.password === this.password) {
                                     this.is_Log = true;
                                     this.users = users;
-                                    console.log(this.is_Log)
+
+                                    localStorage.setItem("user_data", JSON.stringify(user));
                                 }
                             });
+
+                            if (!this.is_Log) {
+                                alert("Verifique su información");
+                            }
                         });
-
                 },
+                logout() {
+
+                    localStorage.removeItem("user_data");
+
+                    this.email = '';
+                    this.password = '';
+                    this.is_Log = false;
+                },
+
                 borrar(email) {
-                    console.log("ingreso")
-                    for (let i = 0; this.users.length > i; i--) {
-                        console.log("aca we")
-                        if (this.users.email = email) {
-                            let spliced = this.users.splice(0, 1);
-                        }
-                        break;
+                    this.users = this.users.filter(user => user.email !== email);
+                    console.log('Usuario eliminado:', email);
+                },
+
+                editar(user) {
+                    this.is_Edit = true;
+                    this.editarUsuario = { ...user };
+                    this.originalEmail = user.email;
+                },
+
+                cancelarEdicion() {
+                    this.is_Edit = false;
+                    this.editarUsuario = null;
+                    this.originalEmail = null;
+                },
+
+                saveEdit() {
+                    const index = this.users.findIndex(user => user.email === this.originalEmail);
+                    if (index !== -1) {
+                        this.users[index] = { ...this.editarUsuario };
                     }
+
+                    this.is_Edit = false;
+                    this.editarUsuario = null;
+                    this.originalEmail = null;
+
+                    localStorage.setItem("user_data", JSON.stringify(this.users));
                 }
+            },
+            mounted() {
+                const user_data = localStorage.getItem("user_data");
+                if (user_data) {
+                    this.is_Log = true;
+                    this.email = JSON.parse(user_data).email;
+                }
+
+                fetch('users.json')
+                    .then(response => response.json())
+                    .then(users => {
+                        this.users = users;
+                    });
             }
-        }).mount('#main')
+        }).mount('#main');
     </script>
-
-
 </body>
