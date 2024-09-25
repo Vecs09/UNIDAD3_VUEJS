@@ -60,6 +60,17 @@
     button:hover {
         background-color: #218838;
     }
+
+    .button2 {
+        background-color: #aa7004;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
 </style>
 
 <body>
@@ -67,6 +78,9 @@
         <h1>
             The real App {{name_app}}
         </h1>
+        <button class="button2" @click="addUser">Añadir Usuario</button>
+
+        
         <form @submit.prevent="login" v-if="!is_Log">
             <fieldset>
                 <label>Email</label>
@@ -81,7 +95,7 @@
             <button type="submit">Access</button>
         </form>
 
-        <div v-if="is_Log && !is_Edit">
+        <div v-if="is_Log && !is_Edit && !is_add">
             <h2>Bienvenido usuario</h2>
             <button @click="logout">Cerrar sesión</button>
 
@@ -131,6 +145,33 @@
                 <button @click="cancelarEdicion">Cancelar</button>
             </form>
         </div>
+
+
+        <div v-if="is_add">
+            <h3>Creando Usuario</h3>
+
+            <form @submit.prevent="addUser">
+                <fieldset>
+                    <label>Name</label>
+                    <input type="text" v-model="newUser.name" required>
+                </fieldset>
+
+                <fieldset>
+                    <label>Email</label>
+                    <input type="email" v-model="newUser.email" required>
+                </fieldset>
+
+                <fieldset>
+                    <label>Username</label>
+                    <input type="text" v-model="newUser.username" required>
+                </fieldset>
+
+                <button type="submit">Guardar</button>
+                <button @click="cancelarAddUser">Cancelar</button>
+            </form>
+        </div>
+
+
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -148,6 +189,8 @@
                     is_Edit: false,
                     editUser: null,
                     originalEmail: null,
+                    is_add: false,
+                    newUser:ref([name=" ", username=" ", email=" "]),
                     users: []
                 };
             },
@@ -209,6 +252,23 @@
                     this.originalEmail = null;
 
                     localStorage.setItem("user_data", JSON.stringify(this.users));
+                },
+
+                addUser(){
+                    
+                   this.users.push({...this.newUser});
+                    console.log("add user")
+                   this.cancelarAddUser();
+                   this.is_add=true;
+                },
+
+                cancelarAddUser(){
+                    this.is_add = false;
+                    this.newUser ={
+                        name:'',
+                        username:'',
+                        email:''
+                    };
                 }
             },
             mounted() {
