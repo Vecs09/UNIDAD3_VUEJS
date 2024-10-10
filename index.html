@@ -127,29 +127,31 @@
             {{resultado}}
         </label>
 
-       
+
 
         <form>
 
             <fieldset>
-                    <label>
-                        Nombre:
-                    </label>
+                <label>
+                    Nombre:
+                </label>
                 <input type="" v-model="name" name="">
             </fieldset>
 
-            
+
             <br>
-            
+
             <fieldset>
                 <label>
                     rol:
                 </label>
                 <input type="" v-model="rol" rol="">
             </fieldset>
+
             <button v-on:click="agregarUsuario" type="button">
                 Guardar
             </button>
+            
         </form>
 
         <ul>
@@ -207,15 +209,15 @@
             },
 
             methods: {
-                agregarUsuario(){
+                agregarUsuario() {
                     let temporal =
                     {
                         "name": this.name,
                         "rol": this.rol
                     }
                     this.users.push(temporal)
-                    this.name ='',
-                    this.rol=''
+                    this.name = '',
+                        this.rol = ''
                 }
             }
 

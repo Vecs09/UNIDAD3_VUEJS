@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Catalog</title>
+    <link rel="stylesheet" href="stylem.css">
+</head>
+<body>
+    <div id="main">
+        <!-- Aquí aparecerán las tarjetas dinámicas -->
+        <div v-for="movie in movies" :key="movie.id" class="card">
+            <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Imagen de la película">
+            <h2>{{ movie.title }}</h2>
+            <p>{{ movie.overview }}</p>
+            <button @click="viewMovie(movie)">RAITEAR</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    movies: [] // Aquí se almacenarán las películas
+                };
+            },
+            methods: {
+                getMovies() {
+                    fetch('https://api.themoviedb.org/3/discover/movie?api_key=b4014e28c8f91a3d85b70da33bb5afb2')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.movies = data.results; // Guardamos los resultados en 'movies'
+                        })
+                        .catch(error => {
+                            console.log("Error: " + error);
+                        });
+                },
+
+                viewMovie(movie) {
+                    const movieId = movie.id;
+                    window.location.href = `movie.html?id=${movieId}`;
+                }
+            },
+            mounted() {
+                this.getMovies(); // Llamamos a la API cuando la app se monte
+            }
+        }).mount('#main');
+    </script>
+</body>
+
+</html>

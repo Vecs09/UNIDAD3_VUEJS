@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoviesDB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="main">
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+        <form @submit.prevent="login" v-if="!is_Log">
+            <fieldset>
+                <legend>MOVIES DB - LOGIN</legend>
+
+                <fieldset>
+                    <label>Email</label>
+                    <input type="email" v-model="email" required>
+                </fieldset>
+
+                <fieldset>
+                    <label>Password</label>
+                    <input type="password" v-model="password" required>
+                </fieldset>
+
+                <button type="submit">Access</button>
+            </fieldset>
+        </form>
+    </div>
+    <script>
+          const { createApp, ref } = Vue
+        createApp({
+            data() {
+                return {
+                    email: '',
+                    password: '',
+                    is_Log: false
+                };
+            },
+            methods: {
+                login() {
+                    localStorage.setItem('email', this.email);
+                    localStorage.setItem('password', this.password);
+
+
+                    window.location.href = 'movies.html';
+                }
+            }
+        }).mount('#main')
+    </script>
+</body>
+
+</html>
