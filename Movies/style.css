@@ -1,6 +1,6 @@
 body {
-    background-color: #1a1a1a; /* Fondo negro oscuro */
-    color: #e0e0e0; /* Texto claro */
+    background-color: #1a1a1a; 
+    color: #e0e0e0; 
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -10,14 +10,14 @@ body {
 }
 
 div {
-    background-color: #2a2a2a; /* Fondo gris oscuro */
+    background-color: #2a2a2a;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 fieldset {
-    border: 1px solid #444; /* Borde gris oscuro */
+    border: 1px solid #444;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 8px;
@@ -25,21 +25,21 @@ fieldset {
 
 legend {
     font-size: 20px;
-    color: #ff4d4d; /* Rojo suave */
+    color: #ff4d4d; 
     font-weight: bold;
 }
 
 label {
     display: block;
     margin-bottom: 8px;
-    color: #e0e0e0; /* Color del texto */
+    color: #e0e0e0; 
 }
 
 input {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #444; /* Borde gris oscuro */
+    border: 1px solid #444;
     border-radius: 5px;
     background-color: #1a1a1a;
     color: #e0e0e0;
@@ -48,12 +48,12 @@ input {
 }
 
 input::placeholder {
-    color: #8e8e8e; /* Color de los placeholders */
+    color: #8e8e8e; 
 }
 
 input:focus {
     outline: none;
-    border-color: #ff4d4d; /* Color rojo cuando se selecciona el campo */
+    border-color: #ff4d4d; 
     box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
 }
 
@@ -61,7 +61,7 @@ button {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    background-color: #ff4d4d; /* Botón rojo suave */
+    background-color: #ff4d4d; 
     color: white;
     border: none;
     border-radius: 5px;
@@ -69,5 +69,5 @@ button {
 }
 
 button:hover {
-    background-color: #e04343; /* Rojo más oscuro al pasar el mouse */
+    background-color: #e04343; 
 }

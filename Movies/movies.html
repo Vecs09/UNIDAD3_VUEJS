@@ -4,17 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies Catalog</title>
+    <title>Movies DB</title>
     <link rel="stylesheet" href="stylem.css">
 </head>
+
 <body>
     <div id="main">
-        <!-- Aquí aparecerán las tarjetas dinámicas -->
-        <div v-for="movie in movies" :key="movie.id" class="card">
-            <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Imagen de la película">
-            <h2>{{ movie.title }}</h2>
-            <p>{{ movie.overview }}</p>
-            <button @click="viewMovie(movie)">RAITEAR</button>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="#">Movies DB - Catalog</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Popular</a></li>
+                <li><a href="#">Top Rated</a></li>
+                <li><a href="#">Upcoming</a></li>
+            </ul>
+            <button class="back-button" @click="volver">Log out</button>
+        </div>
+    </nav>
+   
+    
+            <div v-for="movie in movies" :key="movie.id" class="card">
+                <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="Imagen de la película">
+                <h2>{{ movie.title }}</h2>
+                <p>{{ movie.overview }}</p>
+                <p class="vote-average">{{ movie.vote_average }} / 10</p>
+                <button @click="viewMovie(movie)">RAITEAR</button>
+            </div>
         </div>
     </div>
 
@@ -25,7 +43,7 @@
         createApp({
             data() {
                 return {
-                    movies: [] // Aquí se almacenarán las películas
+                    movies: []
                 };
             },
             methods: {
@@ -33,7 +51,7 @@
                     fetch('https://api.themoviedb.org/3/discover/movie?api_key=b4014e28c8f91a3d85b70da33bb5afb2')
                         .then(response => response.json())
                         .then(data => {
-                            this.movies = data.results; // Guardamos los resultados en 'movies'
+                            this.movies = data.results;
                         })
                         .catch(error => {
                             console.log("Error: " + error);
@@ -43,10 +61,13 @@
                 viewMovie(movie) {
                     const movieId = movie.id;
                     window.location.href = `movie.html?id=${movieId}`;
+                },
+                volver() {
+                    window.location.href = "index.html";
                 }
             },
             mounted() {
-                this.getMovies(); // Llamamos a la API cuando la app se monte
+                this.getMovies();
             }
         }).mount('#main');
     </script>

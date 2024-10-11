@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies DB - Details</title>
+    <link rel="stylesheet" href="stylemd.css">
+</head>
+<body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <div id="main" class="details">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="logo">
+                    <a href="movies.html">Movies DB - Catalog</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Popular</a></li>
+                    <li><a href="#">Top Rated</a></li>
+                    <li><a href="#">Upcoming</a></li>
+                </ul>
+                <button class="back-button" @click="volver">Log out</button>
+            </div>
+        </nav>
+
+        <div class="card" v-if="movie.id">
+            <img :src="'https://www.themoviedb.org/t/p/w600_and_h900_bestv2/' + movie.poster_path" alt="movie poster">
+            <div class="card-content">
+                <h2>{{ movie.title }}</h2>
+                <p><strong>Fecha de Publicacion:</strong><br>{{ movie.release_date }}</p>
+                <p>{{ movie.overview }}</p>
+
+                <div class="generes">
+                    <h3>Genero:</h3>
+                    <ul>
+                        <li v-for="genre in movie.genres">{{ genre.name }}</li>
+                    </ul>
+                </div>
+                <p><strong>Idioma Original:</strong> {{ movie.original_language }}</p>
+                <p><strong>Popularidad:</strong> {{ movie.popularity }}</p>
+                <p><strong>Votos Generales:</strong> {{ movie.vote_average }}</p>
+                <p><strong>Conteo de Votos:</strong> {{ movie.vote_count }}</p>
+
+                <h3><strong>Califica esta pelicula:</strong><br></h3>
+                <div class="radio-container">
+                    <label v-for="num in 10" :key="num" class="radio-label">
+                        <input type="radio" :value="num" v-model="selectedRating" />
+                        {{ num }}
+                    </label>
+                </div>
+                <p>Rating Seleccionado: {{ selectedRating }}</p>
+
+                <div class="button-container">
+                    <button @click="saveRating()">Guardar</button>
+                    <button @click="deleteRating()">Borrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    movie: {},              
+                    selectedRating: null,   
+                };
+            },
+            methods: {
+                saveRating() {
+                    if (this.selectedRating) {
+                        localStorage.setItem(`rating_${this.movie.id}`, this.selectedRating);
+                    } else {
+                    }
+                },
+                
+                deleteRating() {
+                    localStorage.removeItem(`rating_${this.movie.id}`);
+                    this.selectedRating = null;
+                    alert('Rating eliminado');
+                },
+
+                getMovieDetails() {
+                    const movieId = new URLSearchParams(window.location.search).get('id');
+                    fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=b4014e28c8f91a3d85b70da33bb5afb2`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.movie = data;
+                            this.loadRating(); 
+                        })
+                        .catch(error => console.log(error));
+                },
+
+                loadRating() {
+                    const savedRating = localStorage.getItem(`rating_${this.movie.id}`);
+                    if (savedRating) {
+                        this.selectedRating = savedRating;
+                    }
+                },
+
+                volver() {
+                    window.location.href = "index.html";
+                }
+            },
+            mounted() {
+                this.getMovieDetails(); 
+            }
+        }).mount('#main');
+    </script>
+</body>
+</html>
